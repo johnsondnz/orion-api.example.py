@@ -6,12 +6,6 @@ import re
 import datetime 
 import requests
 
-# import now for timezone aware, uses UTC
-from django.utils.timezone import now
-
-# import application settings
-from classes.settings import Settings
-
 class Orion():
 
     def __init__(self):
@@ -36,9 +30,6 @@ class Orion():
         return self.q
 
     def npm_add_node(self, **kwargs):
-
-        s = Settings()
-        settings = s.get_all_settings()
 
         # first check this device isn't already in Orion
         self.ip_check = self.con.query('SELECT NodeID FROM Orion.Nodes WHERE IPAddress=@ip_address', ip_address=kwargs.get('ip_address'))
@@ -148,9 +139,6 @@ class Orion():
         self.con.invoke('Orion.Nodes', 'PollNow', 'N:%s' % self.node_id)
 
     def ncm_add_node(self, node_id, **kwargs):
-
-        s = Settings()
-        settings = s.get_all_settings()
 
         # check that device isn't already managed in Orion NCM
         self.ip_check = self.con.query('SELECT NodeID FROM Cirrus.Nodes WHERE AgentIP=@ip_address', ip_address=kwargs.get('ip_address'))
